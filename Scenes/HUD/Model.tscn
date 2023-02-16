@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Button
+
+var model
+
+func _ready() -> void:
+	
+	text = model.name
+	
+
+func _process(delta: float) -> void:
+	if is_instance_valid(model) == false:
+		queue_free()
+
+func _pressed() -> void:
+	
+	Index.select = model
+	
+"
+
+[node name="Model" type="Button"]
+margin_right = 178.0
+margin_bottom = 20.0
+text = "NAME"
+script = SubResource( 1 )

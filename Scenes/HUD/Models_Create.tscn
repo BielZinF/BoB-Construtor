@@ -1,0 +1,63 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Scenes/HUD/Model_C.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scenes/Models/Box.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/Models/Ball.tscn" type="PackedScene" id=3]
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends PanelContainer
+
+
+func _input(event: InputEvent) -> void:
+	
+	if event is InputEventMouseButton:
+		if Input.is_mouse_button_pressed(1):
+			yield(get_tree().create_timer(0.5),\"timeout\")
+			queue_free()
+	
+"
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Button
+
+export(PackedScene) var Model : PackedScene
+
+func _pressed() -> void:
+	
+	var model_b = Model.instance()
+	
+	Index.world.Model.add_child(model_b)
+	
+	model_b.global_transform.origin = Index.world.mouse_3D
+	
+	get_parent().get_parent().queue_free()
+"
+
+[node name="Models" type="PanelContainer"]
+anchor_right = 0.382813
+anchor_bottom = 0.32
+rect_min_size = Vector2( 311, 191 )
+script = SubResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Vbox" type="VBoxContainer" parent="."]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 385.0
+margin_bottom = 185.0
+
+[node name="Model_C" parent="Vbox" instance=ExtResource( 1 )]
+margin_right = 378.0
+margin_bottom = 20.0
+script = SubResource( 1 )
+Model = ExtResource( 2 )
+
+[node name="Model_C2" parent="Vbox" instance=ExtResource( 1 )]
+margin_top = 24.0
+margin_right = 378.0
+margin_bottom = 44.0
+text = "BALL"
+script = SubResource( 1 )
+Model = ExtResource( 3 )

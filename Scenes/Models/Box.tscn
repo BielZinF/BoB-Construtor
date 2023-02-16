@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=2]
+
+[sub_resource type="CubeMesh" id=2430]
+
+[sub_resource type="SpatialMaterial" id=2431]
+albedo_color = Color( 0.376471, 0.67451, 1, 1 )
+
+[sub_resource type="BoxShape" id=2432]
+
+[node name="Box" type="MeshInstance"]
+mesh = SubResource( 2430 )
+material/0 = SubResource( 2431 )
+
+[node name="StaticBody" type="StaticBody" parent="."]
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody"]
+shape = SubResource( 2432 )
