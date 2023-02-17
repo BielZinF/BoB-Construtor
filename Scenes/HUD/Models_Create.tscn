@@ -28,8 +28,6 @@ func _pressed() -> void:
 	
 	Index.world.Model.add_child(model_b)
 	
-	model_b.global_transform.origin = Index.world.mouse_3D
-	
 	get_parent().get_parent().queue_free()
 "
 
@@ -45,7 +43,7 @@ __meta__ = {
 [node name="Vbox" type="VBoxContainer" parent="."]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 385.0
+margin_right = 385.001
 margin_bottom = 185.0
 
 [node name="Model_C" parent="Vbox" instance=ExtResource( 1 )]

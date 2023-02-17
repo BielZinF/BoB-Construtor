@@ -28,7 +28,7 @@ func _input(event: InputEvent) -> void:
 		if Input.is_key_pressed(KEY_TAB):
 			if is_instance_valid(Index.select):
 				$Player.global_transform.origin = Index.select.global_transform.origin
-		if Input.is_key_pressed(KEY_SHIFT):
+		if Input.is_key_pressed(KEY_SHIFT) and Input.is_mouse_button_pressed(1) and is_instance_valid(Index.select) == false:
 			for i in($"GUI/2D/Nod".get_children()):
 				i.queue_free()
 			var ct = create_model.instance()
@@ -52,7 +52,18 @@ func _input(event: InputEvent) -> void:
 				Index.select = null
 			else:
 				if is_instance_valid(Index.select):
-					Index.select.global_transform.origin = mouse_3D
+					if Input.is_key_pressed(KEY_SHIFT):
+						Index.select.global_transform.origin = mouse_3D.snapped(Vector3(0.5,0.5,0.5))
+					else: Index.select.global_transform.origin = mouse_3D
+				if Input.is_mouse_button_pressed(2):
+					if is_instance_valid(Index.select):
+						if Ray.get_collider():
+							Index.select.get_child(0).collision_layer = 2
+							
+							Index.select.global_transform.origin = Ray.get_collision_point() + Vector3.UP
+		else:
+			if is_instance_valid(Index.select):
+				Index.select.get_child(0).collision_layer = 1
 		
 		if Input.is_mouse_button_pressed(3):
 			Player.rotation.y += -deg2rad(event.relative.x * sensi)
@@ -64,11 +75,15 @@ func _input(event: InputEvent) -> void:
 			for i in(Model.get_children()):
 				if is_instance_valid(select_view):
 					select_propriety()
+			if Ray.get_collider() == null:
+				Index.select = null
+				for i in($Pos.get_children()):
+					i.queue_free()
 		
 		if Input.is_mouse_button_pressed(4):
-			Cam.transform.origin.y += -sensi * 3
+			Cam.transform.origin.y += -sensi * 3.5
 		if Input.is_mouse_button_pressed(5):
-			Cam.transform.origin.y += sensi * 3
+			Cam.transform.origin.y += sensi * 3.5
 
 func select_propriety():
 	Index.select = select_view
@@ -83,8 +98,10 @@ func select_propriety():
 
 func _on_Area_body_entered(body: Node) -> void:
 	if body.name != "not":
+		$Select/Model.get_active_material(0).albedo_color = Color(0, 1, 1)
 		select_view = body.get_parent()
-
+	else:
+		$Select/Model.get_active_material(0).albedo_color = Color(1, 0, 0.351563)
 
 func _on_Timer_timeout() -> void:
 	for x in($"GUI/2D/Tree/Vbox/Panel/Mesh".get_children()):
